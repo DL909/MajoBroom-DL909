@@ -16,7 +16,7 @@ public class ServerConfig
     static {
         BUILDER.comment("Flight Settings").push("flight");
         MAX_SPEED_SPEC = BUILDER
-                .comment("Max Horizontal Speed (blocks/tick) (Acceration also needed to change)")
+                .comment("Max Horizontal Speed (blocks/tick) (Acceleration also needed to change)")
                 .defineInRange("maxSpeed", 0.9D, 0.3D, 2.0D);
         ACCELERATION_SPEC = BUILDER
                 .comment("Horizontal Acceleration")
@@ -57,17 +57,17 @@ public class ServerConfig
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     // ============ ModConfigSpec 值（配置定义） ============
-    private static ModConfigSpec.DoubleValue MAX_SPEED_SPEC;
-    private static ModConfigSpec.DoubleValue ACCELERATION_SPEC;
-    private static ModConfigSpec.DoubleValue MAX_VERTICAL_SPEED_SPEC;
-    private static ModConfigSpec.DoubleValue VERTICAL_ACCELERATION_SPEC;
-    private static ModConfigSpec.DoubleValue MOMENTUM_SPEC;
-    private static ModConfigSpec.DoubleValue GROUND_CHECK_OFFSET_SPEC;
-    private static ModConfigSpec.DoubleValue GROUND_REPULSION_SPEC;
-    private static ModConfigSpec.DoubleValue NO_ARMOR_SPEED_PENALTY_SPEC;
-    private static ModConfigSpec.BooleanValue ARMOR_OVERPOWER_SPEC;
-    private static ModConfigSpec.BooleanValue ARMOR_BLESS_SPEC;
-    private static ModConfigSpec.BooleanValue ARMOR_IMMORTAL_SPEC;
+    private static final ModConfigSpec.DoubleValue MAX_SPEED_SPEC;
+    private static final ModConfigSpec.DoubleValue ACCELERATION_SPEC;
+    private static final ModConfigSpec.DoubleValue MAX_VERTICAL_SPEED_SPEC;
+    private static final ModConfigSpec.DoubleValue VERTICAL_ACCELERATION_SPEC;
+    private static final ModConfigSpec.DoubleValue MOMENTUM_SPEC;
+    private static final ModConfigSpec.DoubleValue GROUND_CHECK_OFFSET_SPEC;
+    private static final ModConfigSpec.DoubleValue GROUND_REPULSION_SPEC;
+    private static final ModConfigSpec.DoubleValue NO_ARMOR_SPEED_PENALTY_SPEC;
+    private static final ModConfigSpec.BooleanValue ARMOR_OVERPOWER_SPEC;
+    private static final ModConfigSpec.BooleanValue ARMOR_BLESS_SPEC;
+    private static final ModConfigSpec.BooleanValue ARMOR_IMMORTAL_SPEC;
 
 
     // ============ 缓存值（实际使用，性能优化） ============

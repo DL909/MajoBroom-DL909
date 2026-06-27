@@ -58,7 +58,7 @@ public class ServerConfig
                 .comment("Effects given to player when wear full Majo armor.\n" +
                         "Due to some problem, you must set value in pattern like \"{namespace}:{effect_name}:{level}\"\n"+
                         "i.e. minecraft:speed:2")
-                .define("armorBlessList", new ArrayList<>(Collections.singleton("minecraft:luck:1")));
+                .define("armorBlessList", new ArrayList<>(Collections.singleton("majobroom:decrease_damage:3")));
         ARMOR_IMMORTAL_SPEC = BUILDER
                 .comment("Whether to enable Majo armor to not take damage")
                 .define("armorImmortal", true);

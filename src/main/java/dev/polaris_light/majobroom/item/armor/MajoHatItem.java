@@ -8,7 +8,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -26,8 +25,8 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
-import com.google.common.collect.Iterables;
 
 /**
  * 魔女帽子 - 使用GeckoLib动画的装备
@@ -87,10 +86,21 @@ public class MajoHatItem extends ArmorItem implements GeoItem {
     @Override
     public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(itemstack, world, entity, slot, selected);
-        if (entity instanceof LivingEntity livingEntity && Iterables.contains(livingEntity.getArmorSlots(), itemstack)) {
-            if (ServerConfig.armorBless) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 240, 3, false, false));
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 240, 3, false, false));
+        if(world.getGameTime()%60 == 0){
+            if(!ServerConfig.armorBlessList.isEmpty()){
+                if(entity instanceof LivingEntity livingEntity){
+                    var list = new ArrayList<ItemStack>();
+                    livingEntity.getArmorSlots().forEach(list::add);
+                    if (list.get(0).getItem() instanceof MajoBootsItem
+                            && list.get(1).getItem() instanceof MajoStockingItem
+                            && list.get(2).getItem() instanceof MajoClothItem
+                            && list.get(3).getItem() instanceof MajoHatItem
+                    ){
+                        for(var effect : ServerConfig.armorBlessList){
+                            livingEntity.addEffect(new MobEffectInstance(effect.x(),300,effect.y(),false,false));
+                        }
+                    }
+                }
             }
         }
 	    if (itemstack.isDamaged() && ServerConfig.armorImmortal) {

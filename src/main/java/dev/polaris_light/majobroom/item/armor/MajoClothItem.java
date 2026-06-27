@@ -1,16 +1,12 @@
 package dev.polaris_light.majobroom.item.armor;
 
 import dev.polaris_light.majobroom.MajoBroom;
-import dev.polaris_light.majobroom.client.renderer.armor.MajoBootsRenderer;
 import dev.polaris_light.majobroom.client.renderer.armor.MajoClothRenderer;
 import dev.polaris_light.majobroom.config.ServerConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -29,7 +25,6 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
-import com.google.common.collect.Iterables;
 
 /**
  * 魔女长袍 - 使用GeckoLib动画的装备
@@ -89,12 +84,6 @@ public class MajoClothItem extends ArmorItem implements GeoItem {
     @Override
     public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(itemstack, world, entity, slot, selected);
-        if (entity instanceof LivingEntity livingEntity && Iterables.contains(livingEntity.getArmorSlots(), itemstack)) {
-            if (ServerConfig.armorBless) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 240, 3, false, false));
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 240, 0, false, false));
-            }
-        }
 	    if (itemstack.isDamaged() && ServerConfig.armorImmortal) {
 		    itemstack.setDamageValue(0);
 	    }

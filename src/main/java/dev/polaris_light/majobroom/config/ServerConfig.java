@@ -1,6 +1,16 @@
 package dev.polaris_light.majobroom.config;
 
+import dev.polaris_light.majobroom.MajoBroom;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.neoforged.neoforge.common.ModConfigSpec;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * 服务端配置（SERVER类型）
@@ -44,9 +54,11 @@ public class ServerConfig
         ARMOR_OVERPOWER_SPEC = BUILDER
                 .comment("Whether to enable Majo armor stat enhancement (including iron's spellbooks attributes)")
                 .define("armorOverpower", false);
-        ARMOR_BLESS_SPEC = BUILDER
-                .comment("Whether to enable Majo armor blessings (effects)")
-                .define("armorBless", false);
+        ARMOR_BLESS_LIST_SPEC = BUILDER
+                .comment("Effects given to player when wear full Majo armor.\n" +
+                        "Due to some problem, you must set value in pattern like \"{namespace}:{effect_name}:{level}\"\n"+
+                        "i.e. minecraft:speed:2")
+                .define("armorBlessList", new ArrayList<>(Collections.singleton("minecraft:luck:1")));
         ARMOR_IMMORTAL_SPEC = BUILDER
                 .comment("Whether to enable Majo armor to not take damage")
                 .define("armorImmortal", true);
@@ -66,7 +78,7 @@ public class ServerConfig
     private static final ModConfigSpec.DoubleValue GROUND_REPULSION_SPEC;
     private static final ModConfigSpec.DoubleValue NO_ARMOR_SPEED_PENALTY_SPEC;
     private static final ModConfigSpec.BooleanValue ARMOR_OVERPOWER_SPEC;
-    private static final ModConfigSpec.BooleanValue ARMOR_BLESS_SPEC;
+    private static final ModConfigSpec.ConfigValue<List<String>> ARMOR_BLESS_LIST_SPEC;
     private static final ModConfigSpec.BooleanValue ARMOR_IMMORTAL_SPEC;
 
 
@@ -81,7 +93,7 @@ public class ServerConfig
     public static double groundRepulsion;
     public static double noArmorSpeedPenalty;
     public static boolean armorOverpower;
-    public static boolean armorBless;
+    public static List<effect> armorBlessList;
     public static boolean armorImmortal;
 
     /**
@@ -98,8 +110,26 @@ public class ServerConfig
         groundCheckOffset = GROUND_CHECK_OFFSET_SPEC.get();
         groundRepulsion = GROUND_REPULSION_SPEC.get();
         noArmorSpeedPenalty = NO_ARMOR_SPEED_PENALTY_SPEC.get();
+        // 盔甲参数
         armorOverpower = ARMOR_OVERPOWER_SPEC.get();
-        armorBless = ARMOR_BLESS_SPEC.get();
+        armorBlessList = new ArrayList<>();
+        for (String i : ARMOR_BLESS_LIST_SPEC.get()){
+            var t =i.split(":");
+            if (t.length != 3){
+                Logger.getLogger(MajoBroom.MODID).warning(String.format("failed to process armorBlessList part:\"%s\"(not enough part)",i));
+            }
+            try {
+                var effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath(t[0],t[1])).orElseThrow();
+                var amplifier = Integer.parseInt(t[2]);
+                assert amplifier>0;
+                assert amplifier<=256;
+
+                armorBlessList.add(new effect(effect,amplifier));
+            }catch (Exception e){
+                Logger.getLogger(MajoBroom.MODID).warning(String.format("failed to process armorBlessList part:%s(%s)",i,e.getMessage()));
+            }
+        }
         armorImmortal = ARMOR_IMMORTAL_SPEC.get();
     }
+    public record effect(Holder<MobEffect> x,int y){}
 }

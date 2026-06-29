@@ -34,8 +34,7 @@ public class BroomConfigScreen extends AbstractBroomScreen {
     private IconButton perspectiveThirdButton;   // 第三人称按钮
     private IconButton sidewaysSittingButton;
     private IconButton autoHoverButton;
-    private ValueSlider speedSlider;
-    
+
     // 配置数据（本地副本）
     private PerspectiveMode perspectiveMode;
     private boolean sidewaysSitting;
@@ -81,7 +80,7 @@ public class BroomConfigScreen extends AbstractBroomScreen {
         // 自动切换视角三选一按钮（第一行：y + 21）
         // 参考Create mod的Attribute Filter实现，三个按钮水平排列
         int perspectiveY = y + 21;
-        int perspectiveStartX = buttonCenterX;  // 第一个按钮与下方开关按钮左对齐
+        @SuppressWarnings("UnnecessaryLocalVariable") int perspectiveStartX = buttonCenterX;  // 第一个按钮与下方开关按钮左对齐
         
         perspectiveFirstButton = new IconButton(perspectiveStartX, perspectiveY, GuiIcons.I_PERSPECTIVE_FIRST);
         perspectiveFirstButton.withCallback(() -> this.perspectiveMode = PerspectiveMode.FIRST_PERSON);
@@ -117,12 +116,14 @@ public class BroomConfigScreen extends AbstractBroomScreen {
 
         // 速度滑动条（第四行：y + 86，独立一行，左侧对齐文本）
         int sliderY = y + 86;
-        speedSlider = new ValueSlider(
-            textX, 
-            sliderY + 12,  // 滑条在标签下方
-            contentWidth,  // 使用内容区域宽度
-            Component.translatable("gui.majobroom.config.speed"),
-            speedPercent
+        // 滑条在标签下方
+        // 使用内容区域宽度
+        ValueSlider speedSlider = new ValueSlider(
+                textX,
+                sliderY + 12,  // 滑条在标签下方
+                contentWidth,  // 使用内容区域宽度
+                Component.translatable("gui.majobroom.config.speed"),
+                speedPercent
         );
         speedSlider.withCallback(newValue -> this.speedPercent = newValue);
 

@@ -17,6 +17,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -39,10 +40,10 @@ public class MajoStockingItem extends ArmorItem implements GeoItem {
             private GeoArmorRenderer<?> renderer;
 
             @Override
-            public <T extends LivingEntity> HumanoidModel<T> getGeoArmorRenderer(T livingEntity, 
-                                                                   ItemStack itemStack, 
-                                                                   EquipmentSlot equipmentSlot, 
-                                                                   HumanoidModel<T> original) {
+            public <T extends LivingEntity> GeoArmorRenderer<?> getGeoArmorRenderer(T livingEntity,
+                                                                                    ItemStack itemStack,
+                                                                                    EquipmentSlot equipmentSlot,
+                                                                                    HumanoidModel<T> original) {
                 if (this.renderer == null)
                     this.renderer = new MajoStockingRenderer();
 
@@ -74,7 +75,7 @@ public class MajoStockingItem extends ArmorItem implements GeoItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected) {
         super.inventoryTick(itemstack, world, entity, slot, selected);
         if (itemstack.isDamaged() && ServerConfig.armorImmortal) {
 		    itemstack.setDamageValue(0);
@@ -92,7 +93,7 @@ public class MajoStockingItem extends ArmorItem implements GeoItem {
     }
 
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers() {
+    public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers() {
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
 
         // 护甲值

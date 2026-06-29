@@ -93,7 +93,7 @@ public class TooltipHelper {
         StringBuilder currentLine = new StringBuilder();
         int width = 0;
         for (String word : words) {
-            int newWidth = font.width(word.replaceAll("_", ""));
+            int newWidth = font.width(word.replace("_", ""));
             if (width + newWidth > MAX_WIDTH_PER_LINE) {
                 if (width > 0) {
                     String line = currentLine.toString();

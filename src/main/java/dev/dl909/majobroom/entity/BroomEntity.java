@@ -297,7 +297,7 @@ public class BroomEntity extends Entity implements GeoEntity {
         }
         
         this.setYRot(this.getYRot() + this.deltaRotation);
-        this.deltaRotation *= ServerConfig.momentum;
+        this.deltaRotation *= (float) ServerConfig.momentum;
         
         // 2. 前进速度
         float forwardSpeed = 0.0F;

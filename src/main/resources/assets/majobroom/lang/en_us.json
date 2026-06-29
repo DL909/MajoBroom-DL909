@@ -55,5 +55,6 @@
   "item.majobroom.broom.tooltip.condition5": "Press R Key",
   "item.majobroom.broom.tooltip.behaviour5": "_Quickly summon_ or _collect_ the broom.",
   "item.majobroom.broom.tooltip.condition6": "Mod Compatibility",
-  "item.majobroom.broom.tooltip.behaviour6": "Compatible with _Sophisticated Backpacks_ and _Cosmetic Armor_. Broom can be summoned from _backpack_, witch cloth work in _cosmetic armor slots_."
+  "item.majobroom.broom.tooltip.behaviour6": "Compatible with _Sophisticated Backpacks_ and _Cosmetic Armor_. Broom can be summoned from _backpack_, witch cloth work in _cosmetic armor slots_.",
+  "narration.slider": "slider"
 }

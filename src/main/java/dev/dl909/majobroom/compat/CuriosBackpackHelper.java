@@ -110,7 +110,7 @@ class CuriosBackpackHelper {
             }
             @SuppressWarnings("unchecked")
             Optional<Object> handlerOpt = (Optional<Object>) optionalHandler;
-            if (!handlerOpt.isPresent()) {
+            if (handlerOpt.isEmpty()) {
                 return backpacks;
             }
             
@@ -127,7 +127,7 @@ class CuriosBackpackHelper {
                     }
                     @SuppressWarnings("unchecked")
                     Optional<Object> stacksHandlerOpt = (Optional<Object>) optionalStacksHandler;
-                    if (!stacksHandlerOpt.isPresent()) {
+                    if (stacksHandlerOpt.isEmpty()) {
                         continue;
                     }
                     

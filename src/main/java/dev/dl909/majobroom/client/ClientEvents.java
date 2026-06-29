@@ -1,17 +1,17 @@
 package dev.dl909.majobroom.client;
 
-import dev.dl909.majobroom.client.input.KeyBindings;
 import dev.dl909.majobroom.MajoBroom;
+import dev.dl909.majobroom.client.input.KeyBindings;
 import dev.dl909.majobroom.client.renderer.entity.BroomGeoRenderer;
-import dev.dl909.majobroom.init.ModEntities;
 import dev.dl909.majobroom.client.tooltip.TooltipModifier;
+import dev.dl909.majobroom.init.ModEntities;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * 客户端事件处理
@@ -19,7 +19,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
  */
 @EventBusSubscriber(modid = MajoBroom.MODID, value = Dist.CLIENT)
 public final class ClientEvents {
-    private ClientEvents() {}
+    private ClientEvents() {
+    }
 
     /**
      * 注册实体渲染器
@@ -43,7 +44,7 @@ public final class ClientEvents {
      */
     @EventBusSubscriber(modid = MajoBroom.MODID, value = Dist.CLIENT)
     public static class GameEventHandler {
-        
+
         /**
          * 添加物品 Tooltip
          */

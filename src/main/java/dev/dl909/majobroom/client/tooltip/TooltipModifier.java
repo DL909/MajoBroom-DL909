@@ -1,9 +1,8 @@
 package dev.dl909.majobroom.client.tooltip;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +34,7 @@ public interface TooltipModifier {
 
     /**
      * 修改 tooltip
+     *
      * @param context tooltip 事件上下文
      */
     void modify(ItemTooltipEvent context);

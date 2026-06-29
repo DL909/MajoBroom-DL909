@@ -6,11 +6,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModEntities {
-    private ModEntities() {}
+    private ModEntities() {
+    }
 
     public static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, MajoBroom.MODID);

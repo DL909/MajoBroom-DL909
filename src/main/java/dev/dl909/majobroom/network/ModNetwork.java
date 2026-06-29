@@ -16,38 +16,39 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
  */
 @EventBusSubscriber(modid = MajoBroom.MODID)
 public final class ModNetwork {
-    private ModNetwork() {}
+    private ModNetwork() {
+    }
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
-        
+
         // 输入控制包（客户端→服务端）
         registrar.playToServer(
-            BroomInputPayload.TYPE,
-            BroomInputPayload.STREAM_CODEC,
-            BroomInputPayload::handle
+                BroomInputPayload.TYPE,
+                BroomInputPayload.STREAM_CODEC,
+                BroomInputPayload::handle
         );
-        
+
         // 召唤/收回包（客户端→服务端）
         registrar.playToServer(
-            BroomSummonPayload.TYPE,
-            BroomSummonPayload.STREAM_CODEC,
-            BroomSummonPayload::handle
+                BroomSummonPayload.TYPE,
+                BroomSummonPayload.STREAM_CODEC,
+                BroomSummonPayload::handle
         );
-        
+
         // 配置同步包（客户端→服务端）
         registrar.playToServer(
-            BroomConfigPayload.TYPE,
-            BroomConfigPayload.STREAM_CODEC,
-            BroomConfigPayload::handle
+                BroomConfigPayload.TYPE,
+                BroomConfigPayload.STREAM_CODEC,
+                BroomConfigPayload::handle
         );
-        
+
         // 下马包（客户端→服务端）
         registrar.playToServer(
-            BroomDismountPayload.TYPE,
-            BroomDismountPayload.STREAM_CODEC,
-            BroomDismountPayload::handle
+                BroomDismountPayload.TYPE,
+                BroomDismountPayload.STREAM_CODEC,
+                BroomDismountPayload::handle
         );
     }
 }

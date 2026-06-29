@@ -11,8 +11,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -48,16 +48,16 @@ public class MajoBootsItem extends ArmorItem implements GeoItem {
                     this.renderer = new MajoBootsRenderer();
 
                 this.renderer.prepForRender(
-                    livingEntity, 
-                    itemStack, 
-                    equipmentSlot, 
-                    original,
-                    Minecraft.getInstance().renderBuffers().bufferSource(),
-                    0.0F,
-                    0.0F,
-                    0.0F,
-                    0.0F,
-                    0.0F
+                        livingEntity,
+                        itemStack,
+                        equipmentSlot,
+                        original,
+                        Minecraft.getInstance().renderBuffers().bufferSource(),
+                        0.0F,
+                        0.0F,
+                        0.0F,
+                        0.0F,
+                        0.0F
                 );
 
                 return this.renderer;
@@ -78,8 +78,8 @@ public class MajoBootsItem extends ArmorItem implements GeoItem {
     public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected) {
         super.inventoryTick(itemstack, world, entity, slot, selected);
         if (itemstack.isDamaged() && ServerConfig.armorImmortal) {
-		    itemstack.setDamageValue(0);
-	    }
+            itemstack.setDamageValue(0);
+        }
     }
 
     @Override
@@ -98,39 +98,39 @@ public class MajoBootsItem extends ArmorItem implements GeoItem {
 
         // 护甲值
         builder.add(
-            Attributes.ARMOR,
-            new AttributeModifier(
-                ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "majo_boots_armor"),
-                ServerConfig.armorOverpower ? 6.0 : this.getDefense(),
-                AttributeModifier.Operation.ADD_VALUE
-            ),
-            EquipmentSlotGroup.FEET
+                Attributes.ARMOR,
+                new AttributeModifier(
+                        ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "majo_boots_armor"),
+                        ServerConfig.armorOverpower ? 6.0 : this.getDefense(),
+                        AttributeModifier.Operation.ADD_VALUE
+                ),
+                EquipmentSlotGroup.FEET
         );
 
         // 护甲韧性
         builder.add(
-            Attributes.ARMOR_TOUGHNESS,
-            new AttributeModifier(
-                ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "majo_boots_toughness"),
-                ServerConfig.armorOverpower ? 10.0F : this.getToughness(),
-                AttributeModifier.Operation.ADD_VALUE
-            ),
-            EquipmentSlotGroup.FEET
+                Attributes.ARMOR_TOUGHNESS,
+                new AttributeModifier(
+                        ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "majo_boots_toughness"),
+                        ServerConfig.armorOverpower ? 10.0F : this.getToughness(),
+                        AttributeModifier.Operation.ADD_VALUE
+                ),
+                EquipmentSlotGroup.FEET
         );
 
         BuiltInRegistries.ATTRIBUTE
-            .getHolder(ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "spell_resist"))
-            .ifPresent(attr -> builder.add(
-                    attr,
-                    new AttributeModifier(
-                        ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "majo_boots_spell_resist"),
-                        ServerConfig.armorOverpower ? 0.5 : 0.1,
-                        AttributeModifier.Operation.ADD_MULTIPLIED_BASE
-                    ),
-                    EquipmentSlotGroup.FEET
-                )
-            );
-        
+                .getHolder(ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "spell_resist"))
+                .ifPresent(attr -> builder.add(
+                                attr,
+                                new AttributeModifier(
+                                        ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "majo_boots_spell_resist"),
+                                        ServerConfig.armorOverpower ? 0.5 : 0.1,
+                                        AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                ),
+                                EquipmentSlotGroup.FEET
+                        )
+                );
+
         return builder.build();
     }
 }

@@ -1,11 +1,12 @@
 package dev.dl909.majobroom.client.input;
 
-import org.lwjgl.glfw.GLFW;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import org.lwjgl.glfw.GLFW;
 
 public final class KeyBindings {
-    private KeyBindings() {}
+    private KeyBindings() {
+    }
 
     public static final KeyMapping SUMMON_BROOM = new KeyMapping(
             "key.majobroom.summon",

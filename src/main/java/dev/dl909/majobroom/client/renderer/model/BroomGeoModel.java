@@ -11,11 +11,11 @@ import software.bernie.geckolib.model.GeoModel;
  */
 public class BroomGeoModel extends GeoModel<BroomEntity> {
     // 使用 GeckoLib 标准路径
-    private static final ResourceLocation MODEL = 
-        ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "geo/entity/broom.geo.json");
-    
-    private static final ResourceLocation TEXTURE = 
-        ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "textures/entity/broom.png");
+    private static final ResourceLocation MODEL =
+            ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "geo/entity/broom.geo.json");
+
+    private static final ResourceLocation TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "textures/entity/broom.png");
 
     @Override
     public ResourceLocation getModelResource(BroomEntity animatable) {

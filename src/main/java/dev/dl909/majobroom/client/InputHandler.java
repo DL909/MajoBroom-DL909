@@ -1,10 +1,10 @@
 package dev.dl909.majobroom.client;
 
 import dev.dl909.majobroom.client.gui.base.SimpleScreenOpener;
+import dev.dl909.majobroom.client.gui.screen.BroomConfigScreen;
 import dev.dl909.majobroom.client.input.KeyBindings;
 import dev.dl909.majobroom.client.particle.BroomTrailParticles;
 import dev.dl909.majobroom.entity.BroomEntity;
-import dev.dl909.majobroom.client.gui.screen.BroomConfigScreen;
 import dev.dl909.majobroom.network.packet.BroomDismountPayload;
 import dev.dl909.majobroom.network.packet.BroomSummonPayload;
 import net.minecraft.ChatFormatting;
@@ -12,9 +12,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
@@ -24,22 +24,23 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 @EventBusSubscriber(value = Dist.CLIENT)
 public final class InputHandler {
-    private InputHandler() {}
-    
+    private InputHandler() {
+    }
+
     // Shift键按下的tick计数（-1表示未按下）
     private static int shiftPressedTicks = -1;
     // 需要长按的tick数（0.5秒 = 10 ticks）
     private static final int REQUIRED_HOLD_TICKS = 10;
     // 上次显示提示的时间，避免频繁显示
     private static long lastMessageTime = 0;
-    
+
     /**
      * 获取shift键是否已按下足够时间
      */
     public static boolean hasHeldShiftLongEnough() {
         return shiftPressedTicks >= REQUIRED_HOLD_TICKS;
     }
-    
+
     /**
      * 重置shift键计时器
      */
@@ -70,7 +71,7 @@ public final class InputHandler {
             if (broom.isFlying()) {
                 BroomTrailParticles.spawn(broom.level(), broom.position());
             }
-            
+
             // 追踪shift键长按时间（仅在骑扫帚时）
             if (mc.options.keyShift.isDown()) {
                 if (shiftPressedTicks < 0) {
@@ -78,7 +79,7 @@ public final class InputHandler {
                 } else {
                     shiftPressedTicks++;
                 }
-                
+
                 // 当达到要求时间时，发送下马包
                 if (shiftPressedTicks == REQUIRED_HOLD_TICKS) {
                     PacketDistributor.sendToServer(new BroomDismountPayload(broom.getId()));
@@ -90,9 +91,9 @@ public final class InputHandler {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastMessageTime > 1000) { // 至少间隔1秒
                         player.displayClientMessage(
-                            Component.translatable("message.majobroom.hold_shift_to_dismount")
-                                .withStyle(ChatFormatting.YELLOW),
-                            true  // actionBar显示
+                                Component.translatable("message.majobroom.hold_shift_to_dismount")
+                                        .withStyle(ChatFormatting.YELLOW),
+                                true  // actionBar显示
                         );
                         lastMessageTime = currentTime;
                     }

@@ -12,7 +12,7 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 public class MajoHatRenderer extends GeoArmorRenderer<MajoHatItem> {
     public MajoHatRenderer() {
         super(new DefaultedItemGeoModel<>(
-            ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_hat")
+                ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_hat")
         ));
     }
 }

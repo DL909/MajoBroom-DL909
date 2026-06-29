@@ -11,12 +11,12 @@ import net.neoforged.fml.event.config.ModConfigEvent;
  */
 @EventBusSubscriber(modid = MajoBroom.MODID)
 public class ConfigEvents {
-    
+
     @SubscribeEvent
     public static void onConfigLoad(final ModConfigEvent.Loading event) {
         ServerConfig.bake();
     }
-    
+
     @SubscribeEvent
     public static void onConfigReload(final ModConfigEvent.Reloading event) {
         ServerConfig.bake();

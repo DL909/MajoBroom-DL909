@@ -16,18 +16,18 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record BroomSummonPayload() implements CustomPacketPayload {
-    
-    public static final CustomPacketPayload.Type<BroomSummonPayload> TYPE = 
-        new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "broom_summon"));
-    
-    public static final StreamCodec<ByteBuf, BroomSummonPayload> STREAM_CODEC = 
-        StreamCodec.unit(new BroomSummonPayload());
-    
+
+    public static final CustomPacketPayload.Type<BroomSummonPayload> TYPE =
+            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "broom_summon"));
+
+    public static final StreamCodec<ByteBuf, BroomSummonPayload> STREAM_CODEC =
+            StreamCodec.unit(new BroomSummonPayload());
+
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
-    
+
     public static void handle(BroomSummonPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             if (!(context.player() instanceof ServerPlayer player)) {
@@ -39,23 +39,23 @@ public record BroomSummonPayload() implements CustomPacketPayload {
                 broom.setAllowDismount(true);
                 player.stopRiding();
                 broom.setAllowDismount(false);
-                
+
                 // 生成回收粒子效果
                 BroomEntity.spawnBroomParticles(player.level(), broom.getX(), broom.getY(), broom.getZ());
-                
+
                 // 返还扫帚物品并保存配置
                 ItemStack stack = new ItemStack(ModItems.BROOM.get());
                 broom.saveConfigToItemStack(stack);  // 保存配置到物品NBT
-                
+
                 // 尝试放回来源背包或原版物品栏
                 java.util.UUID sourceBackpackUUID = broom.getSourceBackpackUUID();
                 boolean stored = false;
-                
+
                 if (sourceBackpackUUID != null) {
                     // 如果有来源背包，优先放回原始背包
                     stored = CompatManager.storeItemToBackpack(player, sourceBackpackUUID, stack);
                 }
-                
+
                 if (!stored) {
                     // 如果没有来源背包或放回失败，直接放回原版物品栏
                     if (!player.getInventory().add(stack)) {
@@ -64,8 +64,8 @@ public record BroomSummonPayload() implements CustomPacketPayload {
                     }
                 }
                 broom.discard();
-                player.level().playSound(null, player.blockPosition(), 
-                    net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_ELYTRA.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                player.level().playSound(null, player.blockPosition(),
+                        net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_ELYTRA.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 return;
             }
 
@@ -79,30 +79,30 @@ public record BroomSummonPayload() implements CustomPacketPayload {
             double x = player.getX();
             double y = player.getY();
             double z = player.getZ();
-            
+
             BroomEntity broom = new BroomEntity(ModEntities.BROOM.get(), level);
             broom.setPos(x, y, z);
             broom.setYRot(player.getYRot());
-            
+
             // 使用兼容管理器移除扫帚，会正确处理背包同步
             CompatManager.FindItemResult removeResult = CompatManager.removeItemFromAllInventories(player, ModItems.BROOM.get());
-            
+
             // 从物品NBT加载配置
             if (!removeResult.stack().isEmpty()) {
                 broom.loadConfigFromItemStack(removeResult.stack());
             }
-            
+
             // 记录来源背包 UUID（如果是从背包召唤的）
             broom.setSourceBackpackUUID(removeResult.sourceBackpackUUID());
-            
+
             level.addFreshEntity(broom);
             player.startRiding(broom);
-            
+
             // 生成召唤粒子效果
             BroomEntity.spawnBroomParticles(level, x, y, z);
-            
-            level.playSound(null, player.blockPosition(), 
-                net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_ELYTRA.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            level.playSound(null, player.blockPosition(),
+                    net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_ELYTRA.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
         });
     }
 }

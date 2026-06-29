@@ -17,7 +17,7 @@ import java.util.Collection;
  * 提供窗口布局、控件管理、渲染流程等基础功能
  */
 public abstract class BaseScreen extends Screen {
-    
+
     protected int windowWidth, windowHeight;
     protected int windowXOffset, windowYOffset;
     protected int guiLeft, guiTop;
@@ -97,18 +97,18 @@ public abstract class BaseScreen extends Screen {
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         // 渲染菜单背景（背景纹理，继承自 Screen）
         renderMenuBackground(graphics);
-        
+
         // 渲染窗口背景（半透明遮罩）
         renderWindowBackground(graphics, mouseX, mouseY, partialTicks);
-        
+
         // 渲染窗口内容（由子类实现）
         renderWindow(graphics, mouseX, mouseY, partialTicks);
-        
+
         // 直接渲染控件，不调用 super.render()，因为那会再次调用 renderBackground()
         for (Renderable renderable : renderables) {
             renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
-        
+
         // 渲染工具提示
         renderWindowForeground(graphics, mouseX, mouseY, partialTicks);
     }

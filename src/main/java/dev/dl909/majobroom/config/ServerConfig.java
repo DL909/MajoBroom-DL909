@@ -1,16 +1,16 @@
 package dev.dl909.majobroom.config;
 
-import dev.dl909.majobroom.MajoBroom;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * 服务端配置（SERVER类型）
@@ -18,8 +18,7 @@ import java.util.logging.Logger;
  * - 会自动从服务端同步到客户端
  * - 适用于游戏规则、平衡性等需要统一的设置
  */
-public class ServerConfig
-{
+public class ServerConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     // 飞行设置
@@ -54,15 +53,30 @@ public class ServerConfig
         ARMOR_OVERPOWER_SPEC = BUILDER
                 .comment("Whether to enable Majo armor stat enhancement (including iron's spellbooks attributes)")
                 .define("armorOverpower", false);
-        ARMOR_BLESS_LIST_SPEC = BUILDER
-                .comment("""
-                        Effects given to player when wear full Majo armor.
-                        Due to some problem, you must set value in pattern like "{namespace}:{effect_name}:{level}"
-                        i.e. minecraft:speed:2""")
-                .define("armorBlessList", new ArrayList<>(Collections.singleton("majobroom:decrease_damage:3")));
         ARMOR_IMMORTAL_SPEC = BUILDER
                 .comment("Whether to enable Majo armor to not take damage")
                 .define("armorImmortal", true);
+        ARMOR_BLESS_SPEC = BUILDER
+                .comment("Whether to enable armor bless\n" +
+                         "(which is a series of effect and enhancement provided to players(and entities) who wear full Majo armor.)")
+                .define("armorBless", false);
+        BLESS_EFFECT_LIST_SPEC = BUILDER
+                .comment("""
+                        Effects given to blessed entity
+                        Due to some problem, you must set value in pattern like "{namespace}:{effect_name}:{level}"
+                        i.e. minecraft:speed:2""")
+                .define("blessEffectList", new ArrayList<>(Collections.singleton("majobroom:decrease_damage:3")));
+        BLESS_IMMUNE_PROJECTILE = BUILDER
+                .comment("Whether a blessed entity is allowed to be immune to projectiles.\n" +
+                         " Immune projectiles will pass directly through the entity."
+                )
+                .define("blessImmuneProjectile", false);
+        BLESS_IMMUNE_PROJECTILE_WHITELIST = BUILDER
+                .comment("use bless_immune_projectile_list as whitelist")
+                .define("blessImmuneProjectileWhitelist", false);
+        BLESS_IMMUNE_PROJECTILE_LIST = BUILDER
+                .define("blessImmuneProjectileList", new ArrayList<>());
+
         BUILDER.pop();
     }
 
@@ -79,8 +93,12 @@ public class ServerConfig
     private static final ModConfigSpec.DoubleValue GROUND_REPULSION_SPEC;
     private static final ModConfigSpec.DoubleValue NO_ARMOR_SPEED_PENALTY_SPEC;
     private static final ModConfigSpec.BooleanValue ARMOR_OVERPOWER_SPEC;
-    private static final ModConfigSpec.ConfigValue<List<String>> ARMOR_BLESS_LIST_SPEC;
     private static final ModConfigSpec.BooleanValue ARMOR_IMMORTAL_SPEC;
+    private static final ModConfigSpec.BooleanValue ARMOR_BLESS_SPEC;
+    private static final ModConfigSpec.ConfigValue<List<String>> BLESS_EFFECT_LIST_SPEC;
+    private static final ModConfigSpec.BooleanValue BLESS_IMMUNE_PROJECTILE;
+    private static final ModConfigSpec.BooleanValue BLESS_IMMUNE_PROJECTILE_WHITELIST;
+    private static final ModConfigSpec.ConfigValue<List<String>> BLESS_IMMUNE_PROJECTILE_LIST;
 
 
     // ============ 缓存值（实际使用，性能优化） ============
@@ -94,8 +112,14 @@ public class ServerConfig
     public static double groundRepulsion;
     public static double noArmorSpeedPenalty;
     public static boolean armorOverpower;
-    public static List<effect> armorBlessList;
     public static boolean armorImmortal;
+    public static boolean armorBless;
+    public static List<effect> blessEffectList;
+    public static boolean blessImmuneProjectile;
+    public static boolean blessImmuneProjectileWhitelist;
+    @SuppressWarnings("rawtypes")
+    public static List<EntityType> blessImmuneProjectileList;
+
 
     /**
      * 将配置值烘焙到缓存变量中（由 ConfigEvents 调用）
@@ -113,24 +137,47 @@ public class ServerConfig
         noArmorSpeedPenalty = NO_ARMOR_SPEED_PENALTY_SPEC.get();
         // 盔甲参数
         armorOverpower = ARMOR_OVERPOWER_SPEC.get();
-        armorBlessList = new ArrayList<>();
-        for (String i : ARMOR_BLESS_LIST_SPEC.get()){
-            var t =i.split(":");
-            if (t.length != 3){
-                Logger.getLogger(MajoBroom.MODID).warning(String.format("failed to process armorBlessList part:\"%s\"(not enough part)",i));
+        armorImmortal = ARMOR_IMMORTAL_SPEC.get();
+        // 盔甲祝福
+        armorBless = ARMOR_BLESS_SPEC.get();
+        blessEffectList = new ArrayList<>();
+        blessImmuneProjectile = BLESS_IMMUNE_PROJECTILE.get();
+        blessImmuneProjectileWhitelist = BLESS_IMMUNE_PROJECTILE_WHITELIST.get();
+        blessImmuneProjectileList = new ArrayList<>();
+        if (armorBless) {
+            for (String i : BLESS_EFFECT_LIST_SPEC.get()) {
+                var t = i.split(":");
+                if (t.length != 3) {
+                    LogUtils.getLogger().warn("failed to process blessEffectList part:\"{}\"(not enough part)", i);
+                }
+                try {
+                    var effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath(t[0], t[1])).orElseThrow();
+                    var amplifier = Integer.parseInt(t[2]);
+                    assert amplifier > 0;
+                    assert amplifier <= 256;
+                    blessEffectList.add(new effect(effect, amplifier - 1));
+                } catch (Exception e) {
+                    LogUtils.getLogger().warn("failed to process blessEffectList part:{}\n{}", i, e.getMessage());
+                }
             }
-            try {
-                var effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath(t[0],t[1])).orElseThrow();
-                var amplifier = Integer.parseInt(t[2]);
-                assert amplifier>0;
-                assert amplifier<=256;
-
-                armorBlessList.add(new effect(effect,amplifier - 1));
-            }catch (Exception e){
-                Logger.getLogger(MajoBroom.MODID).warning(String.format("failed to process armorBlessList part:%s(%s)",i,e.getMessage()));
+            if (blessImmuneProjectile) {
+                for (String i : BLESS_IMMUNE_PROJECTILE_LIST.get()) {
+                    var t = i.split(":");
+                    if (t.length != 2) {
+                        LogUtils.getLogger().warn("failed to process blessImmuneProjectileList part:\"{}\"(not enough part)", i);
+                    }
+                    try {
+                        var entityType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath(t[0], t[1]));
+                        blessImmuneProjectileList.add(entityType);
+                    } catch (Exception e) {
+                        LogUtils.getLogger().warn("failed to process blessImmuneProjectileList part:{}\n{}", i, e.getMessage());
+                    }
+                }
             }
         }
-        armorImmortal = ARMOR_IMMORTAL_SPEC.get();
+
     }
-    public record effect(Holder<MobEffect> x,int y){}
+
+    public record effect(Holder<MobEffect> x, int y) {
+    }
 }

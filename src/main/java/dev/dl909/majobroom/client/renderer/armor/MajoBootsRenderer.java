@@ -9,7 +9,7 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 public class MajoBootsRenderer extends GeoArmorRenderer<MajoBootsItem> {
     public MajoBootsRenderer() {
         super(new DefaultedItemGeoModel<>(
-            ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_boots")
+                ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_boots")
         ));
     }
 }

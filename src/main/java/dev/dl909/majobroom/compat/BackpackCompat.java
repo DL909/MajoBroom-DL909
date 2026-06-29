@@ -22,41 +22,41 @@ import java.util.UUID;
  */
 class BackpackCompat {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackpackCompat.class);
-    
+
     private final Class<?> backpackItemClass;
     private final Method backpackWrapperFromStackMethod;
     private final Method getInventoryHandlerMethod;
     private final Method getContentsUuidMethod;
     private boolean available = false;
-    
+
     // Curios API 辅助类（可选）
     @Nullable
     private final CuriosBackpackHelper curiosHelper;
-    
+
     BackpackCompat() {
         Class<?> tempBackpackItemClass = null;
         Method tempBackpackWrapperFromStackMethod = null;
         Method tempGetInventoryHandlerMethod = null;
         Method tempGetContentsUuidMethod = null;
-        
+
         try {
             LOGGER.info("[MajoBroom] 初始化 SophisticatedBackpacks 兼容...");
-            
+
             // 加载 BackpackItem 类
             tempBackpackItemClass = Class.forName("net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackItem");
             LOGGER.info("[MajoBroom] ✓ BackpackItem 类加载成功");
-            
+
             // 加载 BackpackWrapper 类（NeoForge 1.21.1 新方式）
             Class<?> backpackWrapperClass = Class.forName("net.p3pp3rf1y.sophisticatedbackpacks.backpack.wrapper.BackpackWrapper");
             tempBackpackWrapperFromStackMethod = backpackWrapperClass.getMethod("fromStack", ItemStack.class);
             LOGGER.info("[MajoBroom] ✓ BackpackWrapper.fromStack() 方法找到");
-            
+
             // 加载 IBackpackWrapper 接口
             Class<?> iBackpackWrapperClass = Class.forName("net.p3pp3rf1y.sophisticatedbackpacks.backpack.wrapper.IBackpackWrapper");
             tempGetInventoryHandlerMethod = iBackpackWrapperClass.getMethod("getInventoryHandler");
             tempGetContentsUuidMethod = iBackpackWrapperClass.getMethod("getContentsUuid");
             LOGGER.info("[MajoBroom] ✓ IBackpackWrapper 方法找到");
-            
+
             available = true;
             LOGGER.info("[MajoBroom] ✓✓✓ SophisticatedBackpacks 兼容初始化成功！");
         } catch (ClassNotFoundException e) {
@@ -70,12 +70,12 @@ class BackpackCompat {
             LOGGER.error("[MajoBroom] SophisticatedBackpacks 兼容初始化失败: ", e);
             available = false;
         }
-        
+
         this.backpackItemClass = tempBackpackItemClass;
         this.backpackWrapperFromStackMethod = tempBackpackWrapperFromStackMethod;
         this.getInventoryHandlerMethod = tempGetInventoryHandlerMethod;
         this.getContentsUuidMethod = tempGetContentsUuidMethod;
-        
+
         // 尝试初始化 Curios API 辅助类（可选）
         CuriosBackpackHelper tempCuriosHelper = null;
         if (available && tempBackpackItemClass != null) {
@@ -89,13 +89,14 @@ class BackpackCompat {
         }
         this.curiosHelper = tempCuriosHelper;
     }
-    
+
     boolean isAvailable() {
         return available;
     }
-    
+
     /**
      * 获取背包的 UUID
+     *
      * @param backpackStack 背包物品堆栈
      * @return 背包的 UUID，如果无法获取则返回 null
      */
@@ -104,13 +105,13 @@ class BackpackCompat {
         if (!isBackpackItem(backpackStack)) {
             return null;
         }
-        
+
         try {
             Object backpackWrapper = getBackpackWrapper(backpackStack);
             if (backpackWrapper == null) {
                 return null;
             }
-            
+
             // 调用 getContentsUuid() 返回 Optional<UUID>
             @SuppressWarnings("unchecked")
             java.util.Optional<java.util.UUID> optional = (java.util.Optional<java.util.UUID>) getContentsUuidMethod.invoke(backpackWrapper);
@@ -120,7 +121,7 @@ class BackpackCompat {
             return null;
         }
     }
-    
+
     /**
      * 从玩家装备的背包中移除指定物品
      */
@@ -144,7 +145,7 @@ class BackpackCompat {
         });
         return result != null ? result : FindResult.EMPTY;
     }
-    
+
     /**
      * 按 UUID 查找玩家身上的背包并存储物品
      */
@@ -152,20 +153,21 @@ class BackpackCompat {
         if (stack.isEmpty() || backpackUUID == null) {
             return false;
         }
-        
+
         Boolean result = forEachBackpack(player, backpackStack -> {
             if (backpackUUID.equals(getBackpackUUID(backpackStack))) {
                 return storeInBackpack(backpackStack, stack) ? true : null;
             }
             return null;
         });
-        
+
         return result != null && result;
     }
-    
+
     /**
      * 遍历玩家身上所有背包的通用方法
      * 按优先级顺序：胸甲槽 -> 主物品栏 -> 副手 -> Curios饰品槽
+     *
      * @param processor 处理函数，返回非null则停止遍历并返回结果
      * @return 处理函数的返回值
      */
@@ -180,7 +182,7 @@ class BackpackCompat {
                     return result;
                 }
             }
-            
+
             // 2. 主物品栏
             for (ItemStack stack : player.getInventory().items) {
                 if (isBackpackItem(stack)) {
@@ -190,7 +192,7 @@ class BackpackCompat {
                     }
                 }
             }
-            
+
             // 3. 副手
             ItemStack offhandStack = player.getOffhandItem();
             if (isBackpackItem(offhandStack)) {
@@ -199,7 +201,7 @@ class BackpackCompat {
                     return result;
                 }
             }
-            
+
             // 4. Curios 饰品槽（如果可用）
             CuriosBackpackHelper helper = curiosHelper;
             if (helper != null) {
@@ -214,23 +216,24 @@ class BackpackCompat {
         } catch (Exception e) {
             LOGGER.error("遍历背包时出错: ", e);
         }
-        
+
         return null;
     }
-    
+
     @FunctionalInterface
     private interface BackpackProcessor<T> {
         T process(ItemStack backpackStack);
     }
-    
+
     private boolean isBackpackItem(ItemStack stack) {
         return !stack.isEmpty() && backpackItemClass != null && backpackItemClass.isInstance(stack.getItem());
     }
-    
+
     /**
      * 从背包中提取指定物品（使用 extractItem，会正确触发保存）
+     *
      * @param backpackStack 背包物品堆栈
-     * @param item 要提取的物品
+     * @param item          要提取的物品
      * @return 提取的物品堆栈，如果没找到则返回空
      */
     @Nonnull
@@ -238,15 +241,15 @@ class BackpackCompat {
         if (!isBackpackItem(backpackStack)) {
             return ItemStack.EMPTY;
         }
-        
+
         try {
             IItemHandler inventoryHandler = getBackpackInventoryHandler(backpackStack);
             if (inventoryHandler == null) {
                 return ItemStack.EMPTY;
             }
-            
+
             int slots = inventoryHandler.getSlots();
-            
+
             for (int slot = 0; slot < slots; slot++) {
                 ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
                 if (slotStack.is(item)) {
@@ -257,7 +260,7 @@ class BackpackCompat {
         } catch (Exception e) {
             LOGGER.error("从背包提取物品时出错: ", e);
         }
-        
+
         return ItemStack.EMPTY;
     }
 
@@ -266,15 +269,15 @@ class BackpackCompat {
         if (!isBackpackItem(backpackStack)) {
             return ItemStack.EMPTY;
         }
-        
+
         try {
             IItemHandler inventoryHandler = getBackpackInventoryHandler(backpackStack);
             if (inventoryHandler == null) {
                 return ItemStack.EMPTY;
             }
-            
+
             int slots = inventoryHandler.getSlots();
-            
+
             for (int slot = 0; slot < slots; slot++) {
                 ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
                 if (slotStack.is(item)) {
@@ -284,27 +287,27 @@ class BackpackCompat {
         } catch (Exception e) {
             LOGGER.error("访问背包内容时出错: ", e);
         }
-        
+
         return ItemStack.EMPTY;
     }
-    
+
     private boolean storeInBackpack(ItemStack backpackStack, ItemStack itemToStore) {
         if (!isBackpackItem(backpackStack) || itemToStore.isEmpty()) {
             return false;
         }
-        
+
         try {
             IItemHandler inventoryHandler = getBackpackInventoryHandler(backpackStack);
             if (inventoryHandler == null) {
                 return false;
             }
-            
+
             int slots = inventoryHandler.getSlots();
-            
+
             // 尝试插入到任意槽位
             for (int slot = 0; slot < slots; slot++) {
                 ItemStack remainingStack = inventoryHandler.insertItem(slot, itemToStore.copy(), false);
-                
+
                 // 如果完全插入成功
                 if (remainingStack.isEmpty()) {
                     return true;
@@ -313,10 +316,10 @@ class BackpackCompat {
         } catch (Exception e) {
             LOGGER.error("存储到背包时出错: ", e);
         }
-        
+
         return false;
     }
-    
+
     /**
      * 获取背包的 Wrapper（NeoForge 1.21.1 新方式）
      */
@@ -330,7 +333,7 @@ class BackpackCompat {
             return null;
         }
     }
-    
+
     @Nullable
     private IItemHandler getBackpackInventoryHandler(ItemStack backpackStack) {
         try {
@@ -348,10 +351,10 @@ class BackpackCompat {
     }
 
     /**
-         * 查找结果，包含找到的物品和来源背包 UUID
-         */
-        record FindResult(ItemStack stack, @Nullable UUID sourceBackpackUUID) {
-            static final FindResult EMPTY = new FindResult(ItemStack.EMPTY, null);
+     * 查找结果，包含找到的物品和来源背包 UUID
+     */
+    record FindResult(ItemStack stack, @Nullable UUID sourceBackpackUUID) {
+        static final FindResult EMPTY = new FindResult(ItemStack.EMPTY, null);
 
     }
 }

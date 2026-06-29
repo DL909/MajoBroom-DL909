@@ -22,12 +22,13 @@ import static net.minecraft.ChatFormatting.*;
  * 用于管理物品的详细说明信息
  * 支持按 Shift/Ctrl 显示不同内容
  */
-public record ItemDescription(ImmutableList<Component> lines, 
-                               ImmutableList<Component> linesOnShift,
-                               ImmutableList<Component> linesOnCtrl) {
+public record ItemDescription(ImmutableList<Component> lines,
+                              ImmutableList<Component> linesOnShift,
+                              ImmutableList<Component> linesOnCtrl) {
 
     /**
      * 创建物品描述
+     *
      * @param item 物品
      * @return 物品描述，如果没有翻译则返回 null
      */
@@ -164,7 +165,7 @@ public record ItemDescription(ImmutableList<Component> lines,
                 String[] holdCtrl = I18n.get("tooltip.majobroom.holdForControls", "$").split("\\$");
                 MutableComponent keyShift = Component.translatable("tooltip.majobroom.keyShift");
                 MutableComponent keyCtrl = Component.translatable("tooltip.majobroom.keyCtrl");
-                
+
                 for (List<Component> list : java.util.Arrays.asList(lines, linesOnShift, linesOnCtrl)) {
                     boolean shift = list == linesOnShift;
                     boolean ctrl = list == linesOnCtrl;
@@ -209,8 +210,8 @@ public record ItemDescription(ImmutableList<Component> lines,
             }
 
             return new ItemDescription(
-                    ImmutableList.copyOf(lines), 
-                    ImmutableList.copyOf(linesOnShift), 
+                    ImmutableList.copyOf(lines),
+                    ImmutableList.copyOf(linesOnShift),
                     ImmutableList.copyOf(linesOnCtrl));
         }
     }

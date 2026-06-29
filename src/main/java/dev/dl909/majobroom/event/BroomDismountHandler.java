@@ -2,9 +2,9 @@ package dev.dl909.majobroom.event;
 
 import dev.dl909.majobroom.MajoBroom;
 import dev.dl909.majobroom.entity.BroomEntity;
-import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
 
 /**
  * 扫帚下马事件处理器
@@ -12,7 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
  */
 @EventBusSubscriber(modid = MajoBroom.MODID)
 public class BroomDismountHandler {
-    
+
     /**
      * 处理实体下马事件
      * Minecraft原版的shift下马机制会触发此事件
@@ -24,12 +24,12 @@ public class BroomDismountHandler {
         if (!event.isDismounting()) {
             return;
         }
-        
+
         // 只处理扫帚
         if (!(event.getEntityBeingMounted() instanceof BroomEntity broom)) {
             return;
         }
-        
+
         // 在服务端检查是否允许下马
         if (!event.getLevel().isClientSide) {
             // 如果扫帚标记为允许下马，则放行；否则取消事件

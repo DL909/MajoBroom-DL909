@@ -10,9 +10,10 @@ import net.minecraft.client.gui.GuiGraphics;
 public interface RenderElement {
     /**
      * 渲染元素
+     *
      * @param graphics 渲染上下文
-     * @param x X坐标
-     * @param y Y坐标
+     * @param x        X坐标
+     * @param y        Y坐标
      */
     void render(GuiGraphics graphics, int x, int y);
 }

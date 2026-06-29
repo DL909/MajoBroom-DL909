@@ -17,9 +17,10 @@ import java.util.function.BiConsumer;
  * 提供工具提示、回调机制等基础功能
  */
 public abstract class BaseWidget extends AbstractWidget {
-    
+
     protected List<Component> toolTip = new ArrayList<>();
-    protected BiConsumer<Integer, Integer> onClick = (_$, _$$) -> {};
+    protected BiConsumer<Integer, Integer> onClick = (_$, _$$) -> {
+    };
     protected boolean wasHovered = false;
 
     protected BaseWidget(int x, int y) {

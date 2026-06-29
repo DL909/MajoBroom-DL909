@@ -5,9 +5,9 @@ import dev.dl909.majobroom.entity.BroomEntity;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
 
 /**
  * 客户端骑乘事件处理器
@@ -15,8 +15,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
  */
 @EventBusSubscriber(value = Dist.CLIENT)
 public final class BroomClientHandler {
-    private BroomClientHandler() {}
-    
+    private BroomClientHandler() {
+    }
+
     /**
      * 处理实体骑乘事件
      */
@@ -26,18 +27,18 @@ public final class BroomClientHandler {
         if (!(event.getEntityBeingMounted() instanceof BroomEntity broom)) {
             return;
         }
-        
+
         // 仅客户端处理
         if (!event.getLevel().isClientSide) {
             return;
         }
-        
+
         Minecraft mc = Minecraft.getInstance();
         var player = mc.player;
         if (player == null) {
             return;
         }
-        
+
         // 只处理本地玩家的骑乘事件
         if (event.getEntityMounting().getUUID().equals(player.getUUID())) {
             if (event.isMounting()) {
@@ -49,7 +50,7 @@ public final class BroomClientHandler {
             }
         }
     }
-    
+
     /**
      * 骑上扫帚时的处理
      */
@@ -69,11 +70,11 @@ public final class BroomClientHandler {
                     break;
             }
         }
-        
+
         // 播放飞行音效
         mc.getSoundManager().play(new BroomFlyingSound(broom));
     }
-    
+
     /**
      * 下马时的处理
      */
@@ -82,12 +83,12 @@ public final class BroomClientHandler {
         if (broom.isAutoPerspective()) {
             mc.options.setCameraType(CameraType.FIRST_PERSON);
         }
-        
+
         // 清除强制姿势，恢复正常的姿势控制
         if (mc.player != null) {
             mc.player.setForcedPose(null);
         }
-        
+
         // 音效会在BroomFlyingSound的tick中自动停止
     }
 }

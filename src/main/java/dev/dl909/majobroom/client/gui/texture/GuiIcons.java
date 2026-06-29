@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public enum GuiIcons implements RenderElement {
     // icons.png 中每个图标 16x16
     // 坐标使用 (列, 行) * 16 计算
-    
+
     // 配置界面图标（第1行 y=0）
     I_SIDEWAYS_SITTING(0, 0),    // (0, 0) * 16 - 侧坐姿势
     I_PERSPECTIVE_FIRST(1, 0),   // (1, 0) * 16 - 第一人称
@@ -19,9 +19,9 @@ public enum GuiIcons implements RenderElement {
     I_PERSPECTIVE_THIRD(3, 0),   // (3, 0) * 16 - 第三人称（后视）
     I_AUTO_HOVER(4, 0),          // (4, 0) * 16 - 自动悬浮
     I_CONFIRM(5, 0);             // (5, 0) * 16 - 确认按钮
-    
-    public static final ResourceLocation ICON_ATLAS = 
-        ResourceLocation.fromNamespaceAndPath("majobroom", "textures/gui/icons.png");
+
+    public static final ResourceLocation ICON_ATLAS =
+            ResourceLocation.fromNamespaceAndPath("majobroom", "textures/gui/icons.png");
     public static final int ICON_SIZE = 16;
     public static final int ICON_ATLAS_SIZE = 256;
 

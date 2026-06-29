@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 public class IconButton extends BaseWidget {
     protected RenderElement icon;
     public boolean green;
+
     public IconButton(int x, int y, RenderElement icon) {
         this(x, y, 18, 18, icon);
     }
@@ -41,8 +42,8 @@ public class IconButton extends BaseWidget {
             isHovered = mouseX >= getX() && mouseY >= getY() && mouseX < getX() + width && mouseY < getY() + height;
 
             GuiTextures button = !active ? GuiTextures.BUTTON_DISABLED
-                : isHovered && AllKeys.isMouseButtonDown(0) ? GuiTextures.BUTTON_DOWN
-                    : isHovered ? GuiTextures.BUTTON_HOVER
+                    : isHovered && AllKeys.isMouseButtonDown(0) ? GuiTextures.BUTTON_DOWN
+                      : isHovered ? GuiTextures.BUTTON_HOVER
                         : green ? GuiTextures.BUTTON_GREEN : GuiTextures.BUTTON;
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -52,8 +53,8 @@ public class IconButton extends BaseWidget {
     }
 
     protected void drawBg(GuiGraphics graphics, GuiTextures button) {
-        graphics.blit(button.getLocation(), getX(), getY(), button.getStartX(), button.getStartY(), 
-            button.getWidth(), button.getHeight());
+        graphics.blit(button.getLocation(), getX(), getY(), button.getStartX(), button.getStartY(),
+                button.getWidth(), button.getHeight());
     }
 
     public void setToolTip(Component text) {

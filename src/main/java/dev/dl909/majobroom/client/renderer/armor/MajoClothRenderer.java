@@ -23,7 +23,7 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 public class MajoClothRenderer extends GeoArmorRenderer<MajoClothItem> {
     public MajoClothRenderer() {
         super(new DefaultedItemGeoModel<>(
-            ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_cloth")
+                ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_cloth")
         ));
     }
 
@@ -46,10 +46,10 @@ public class MajoClothRenderer extends GeoArmorRenderer<MajoClothItem> {
 
             // dress 的 X 轴旋转是左右腿旋转的平均值
             dressBone.setRotX(-(leftLeg.xRot + rightLeg.xRot) / 2.0f);
-            
+
             // dress 的 Z 轴位置跟随左腿
             dressBone.setPosZ(leftLeg.z);
-            
+
 
             // 获取当前实体并检查是否在骑乘
             Entity entity = getCurrentEntity();
@@ -58,7 +58,7 @@ public class MajoClothRenderer extends GeoArmorRenderer<MajoClothItem> {
             if (isRiding) {
                 // 骑乘状态：固定旋转角度
                 dressBone.setRotX(1.04f);
-                
+
                 // 隐藏 sithide1 和 sithide2 节点
                 this.model.getBone("sithide1").ifPresent(bone -> bone.setHidden(true));
                 this.model.getBone("sithide2").ifPresent(bone -> bone.setHidden(true));

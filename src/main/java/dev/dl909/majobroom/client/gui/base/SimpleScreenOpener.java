@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
  * 替代 catnip 的 ScreenOpener
  */
 public class SimpleScreenOpener {
-    
+
     /**
      * 打开指定屏幕
      */
@@ -18,7 +18,7 @@ public class SimpleScreenOpener {
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(screen);
     }
-    
+
     /**
      * 关闭当前屏幕
      */

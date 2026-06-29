@@ -6,13 +6,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public final class BroomTrailParticles {
-    private BroomTrailParticles() {}
+    private BroomTrailParticles() {
+    }
 
     private static int counter = 0;
 
     public static void spawn(Level level, Vec3 pos) {
         if (!level.isClientSide) return;
-        
+
         // 直接启用粒子效果，不再检查配置
         // 使用默认的中等质量（interval=3）
         if (++counter % 3 != 0) return;

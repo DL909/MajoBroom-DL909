@@ -5,9 +5,9 @@ import dev.dl909.majobroom.entity.BroomEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 
 /**
  * 处理玩家骑乘扫帚时的客户端渲染效果

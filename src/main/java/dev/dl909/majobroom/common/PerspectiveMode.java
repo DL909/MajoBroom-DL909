@@ -11,20 +11,20 @@ public enum PerspectiveMode implements StringRepresentable {
     SECOND_PERSON("second_person", 2),  // 前视（朝向玩家）
     THIRD_PERSON("third_person", 1);    // 后视（玩家背后）
     // TODO: 越肩视角呢？
-    
+
     private final String name;
     private final int vanillaId;  // Minecraft 原版视角ID
-    
+
     PerspectiveMode(String name, int vanillaId) {
         this.name = name;
         this.vanillaId = vanillaId;
     }
-    
+
     @Override
     public String getSerializedName() {
         return name;
     }
-    
+
     /**
      * 获取Minecraft原版的视角ID
      * 0 = 第一人称
@@ -34,14 +34,14 @@ public enum PerspectiveMode implements StringRepresentable {
     public int getVanillaId() {
         return vanillaId;
     }
-    
+
     /**
      * 获取下一个视角模式（循环）
      */
     public PerspectiveMode next() {
         return values()[(ordinal() + 1) % values().length];
     }
-    
+
     /**
      * 从序号获取视角模式
      */
@@ -52,7 +52,7 @@ public enum PerspectiveMode implements StringRepresentable {
         }
         return values[ordinal];
     }
-    
+
     /**
      * 从名称获取视角模式
      */

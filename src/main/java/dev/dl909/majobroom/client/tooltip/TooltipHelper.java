@@ -18,7 +18,7 @@ import java.util.List;
  * 提供文本格式化和自动换行功能
  */
 public class TooltipHelper {
-    
+
     /**
      * 每行最大宽度（像素）
      */
@@ -41,40 +41,40 @@ public class TooltipHelper {
 
     /**
      * 切割字符串文本组件（自动换行）
-     * 
-     * @param s 要切割的字符串
-     * @param primaryColor 主要颜色
+     *
+     * @param s              要切割的字符串
+     * @param primaryColor   主要颜色
      * @param highlightColor 高亮颜色
-     * @param indent 缩进空格数
+     * @param indent         缩进空格数
      * @return 切割后的文本组件列表
      */
-    public static List<Component> cutStringTextComponent(String s, ChatFormatting primaryColor, 
-                                                          ChatFormatting highlightColor, int indent) {
-        return cutTextComponent(Component.literal(s), 
-                                Style.EMPTY.applyFormat(primaryColor),
-                                Style.EMPTY.applyFormat(highlightColor),
-                                indent);
+    public static List<Component> cutStringTextComponent(String s, ChatFormatting primaryColor,
+                                                         ChatFormatting highlightColor, int indent) {
+        return cutTextComponent(Component.literal(s),
+                Style.EMPTY.applyFormat(primaryColor),
+                Style.EMPTY.applyFormat(highlightColor),
+                indent);
     }
 
     /**
      * 切割字符串文本组件（无缩进）
      */
-    public static List<Component> cutStringTextComponent(String s, ChatFormatting primaryColor, 
-                                                          ChatFormatting highlightColor) {
+    public static List<Component> cutStringTextComponent(String s, ChatFormatting primaryColor,
+                                                         ChatFormatting highlightColor) {
         return cutStringTextComponent(s, primaryColor, highlightColor, 0);
     }
 
     /**
      * 切割文本组件（自动换行，支持下划线高亮）
-     * 
-     * @param c 文本组件
-     * @param primaryStyle 主要样式
+     *
+     * @param c              文本组件
+     * @param primaryStyle   主要样式
      * @param highlightStyle 高亮样式
-     * @param indent 缩进
+     * @param indent         缩进
      * @return 切割后的文本组件列表
      */
     public static List<Component> cutTextComponent(Component c, Style primaryStyle,
-                                                     Style highlightStyle, int indent) {
+                                                   Style highlightStyle, int indent) {
         String s = c.getString();
 
         // 分割单词

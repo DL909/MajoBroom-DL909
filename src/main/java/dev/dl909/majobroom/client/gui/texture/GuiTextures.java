@@ -11,14 +11,14 @@ import net.minecraft.resources.ResourceLocation;
 public enum GuiTextures {
     // 背景纹理
     BROOM_CONFIG("broom_config.png", 190, 151),
-    
+
     // 按钮纹理 (来自 Create 的 widgets.png)
     BUTTON("widgets.png", 0, 0, 18, 18),
     BUTTON_HOVER("widgets.png", 18, 0, 18, 18),
     BUTTON_DOWN("widgets.png", 36, 0, 18, 18),
     BUTTON_GREEN("widgets.png", 72, 0, 18, 18),
     BUTTON_DISABLED("widgets.png", 90, 0, 18, 18),
-    
+
     // 滑动条纹理 (来自 Create 的 value_settings.png)
     VALUE_SETTINGS_MILESTONE("value_settings.png", 0, 0, 7, 8),
     VALUE_SETTINGS_BAR("value_settings.png", 7, 0, 249, 8),

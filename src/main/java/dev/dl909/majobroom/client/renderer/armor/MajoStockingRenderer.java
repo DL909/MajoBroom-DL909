@@ -9,7 +9,7 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 public class MajoStockingRenderer extends GeoArmorRenderer<MajoStockingItem> {
     public MajoStockingRenderer() {
         super(new DefaultedItemGeoModel<>(
-            ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_stocking")
+                ResourceLocation.fromNamespaceAndPath(MajoBroom.MODID, "armor/majo_stocking")
         ));
     }
 }
